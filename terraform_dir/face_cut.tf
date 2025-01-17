@@ -33,3 +33,18 @@ resource "yandex_function_iam_binding" "function-aim-f-face-cut" {
     "system:allUsers"
   ]
 }
+
+
+resource "yandex_function_trigger" "bucket_faces_trigger" {
+  name        = "vvot25-task"
+  function {
+    id = yandex_function.vvot25-face-cut.id
+    service_account_id = yandex_iam_service_account.sa.id
+  }
+  message_queue {
+    queue_id = yandex_message_queue.vvot25-task.arn
+    service_account_id = yandex_iam_service_account.sa.id
+    batch_cutoff = "0"
+    batch_size  = "1"
+}
+}

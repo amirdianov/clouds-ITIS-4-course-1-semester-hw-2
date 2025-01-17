@@ -34,3 +34,18 @@ resource "yandex_function_iam_binding" "function-aim-f-face-detection" {
   ]
 }
 
+
+resource "yandex_function_trigger" "bucket_photo_trigger" {
+  name        = "vvot25-photo"
+  function {
+    id = yandex_function.vvot25-face-detection.id
+    service_account_id = yandex_iam_service_account.sa.id
+  }
+  object_storage {
+    bucket_id = yandex_storage_bucket.vvot25-photo.id
+    suffix = ".jpg"
+    create = true
+    batch_cutoff = "0"
+    batch_size  = "1"
+}
+}
