@@ -9,6 +9,7 @@ resource "yandex_function" "vvot25-face-detection" {
   environment = {
     "AWS_ACCESS_KEY_ID" = yandex_iam_service_account_static_access_key.sa-static-key.access_key,
     "AWS_SECRET_ACCESS_KEY" = yandex_iam_service_account_static_access_key.sa-static-key.secret_key,
+    "msg_queue_url" = yandex_message_queue.vvot25-task.id
   }
   content {
     zip_filename = data.archive_file.vvot25-face-detection.output_path

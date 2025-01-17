@@ -32,6 +32,12 @@ resource "yandex_iam_service_account_static_access_key" "sa-static-key" {
   description        = "static access key"
 }
 
+resource "yandex_message_queue" "vvot25-task" {
+  name = "vvot25-task"
+  access_key = yandex_iam_service_account_static_access_key.sa-static-key.access_key
+  secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
+}
+
 resource "yandex_storage_bucket" "vvot25-photo" {
   bucket = var.bucket_photo
 }
