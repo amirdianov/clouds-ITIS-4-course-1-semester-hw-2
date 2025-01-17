@@ -38,6 +38,47 @@ resource "yandex_message_queue" "vvot25-task" {
   secret_key = yandex_iam_service_account_static_access_key.sa-static-key.secret_key
 }
 
+resource "yandex_api_gateway" "api-gw" {
+  name = "vvot25-apigw"
+  spec = <<-EOT
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: API GW
+paths:
+  /:
+    get:
+      summary: API GW
+      parameters:
+        - name: face
+          in: query
+          required: true
+          schema: 
+            type: string
+
+      x-yc-apigateway-integration:
+        type: object_storage
+        object: '{face}'
+        service_account_id: ${yandex_iam_service_account.sa.id} 
+        bucket: ${yandex_storage_bucket.vvot25-faces.bucket} 
+  /original_photo:
+    get:
+      summary: Get original photo
+      parameters:
+        - name: original_photo
+          in: query
+          required: true
+          schema: 
+            type: string
+
+      x-yc-apigateway-integration:
+        type: object_storage
+        object: '{original_photo}'
+        service_account_id: ${yandex_iam_service_account.sa.id} 
+        bucket: ${yandex_storage_bucket.vvot25-photo.bucket} 
+EOT
+}
+
 resource "yandex_storage_bucket" "vvot25-photo" {
   bucket = var.bucket_photo
 }

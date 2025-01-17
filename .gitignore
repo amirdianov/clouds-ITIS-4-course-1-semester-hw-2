@@ -1,0 +1,6 @@
+.terraform
+.venv
+terraform.tfstate
+.terraform.lock.hcl
+hw_2.tfvars
+terraform.tfstate.backup
